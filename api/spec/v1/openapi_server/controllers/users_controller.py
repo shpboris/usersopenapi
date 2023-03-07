@@ -23,7 +23,7 @@ def create_user(user):  # noqa: E501
     return 'create_user response !'
 
 
-def delete_user_by_id(id):  # noqa: E501
+def delete_user_by_id(user_id):  # noqa: E501
     """Delete a user by ID
 
      # noqa: E501
@@ -36,7 +36,7 @@ def delete_user_by_id(id):  # noqa: E501
     return 'delete_user_by_id response !'
 
 
-def get_user_by_id(id):  # noqa: E501
+def get_user_by_id(user_id):  # noqa: E501
     """Get a user by ID
 
      # noqa: E501
@@ -60,7 +60,7 @@ def get_users():  # noqa: E501
     return 'get_users response !'
 
 
-def update_user_by_id(id, user):  # noqa: E501
+def update_user_by_id(user_id, user):  # noqa: E501
     """Update a user by ID
 
      # noqa: E501

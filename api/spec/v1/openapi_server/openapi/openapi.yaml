@@ -24,6 +24,7 @@ paths:
     post:
       operationId: create_user
       requestBody:
+        x-body-name: user
         content:
           application/json:
             schema:
@@ -41,14 +42,14 @@ paths:
       tags:
       - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
-  /users/{id}:
+  /users/{user_id}:
     delete:
       operationId: delete_user_by_id
       parameters:
       - description: ID of the user to delete
         explode: false
         in: path
-        name: id
+        name: user_id
         required: true
         schema:
           type: integer
@@ -66,7 +67,7 @@ paths:
       - description: ID of the user to get
         explode: false
         in: path
-        name: id
+        name: user_id
         required: true
         schema:
           type: integer
@@ -90,12 +91,13 @@ paths:
       - description: ID of the user to update
         explode: false
         in: path
-        name: id
+        name: user_id
         required: true
         schema:
           type: integer
         style: simple
       requestBody:
+        x-body-name: user
         content:
           application/json:
             schema:
