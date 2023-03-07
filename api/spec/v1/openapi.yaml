@@ -1,0 +1,128 @@
+openapi: 3.0.0
+info:
+  title: User API
+  version: 1.0.0
+servers:
+  - url: /
+paths:
+  /users:
+    get:
+      summary: Get all users
+      operationId: get_users
+      tags:
+        - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+      responses:
+        '200':
+          description: A list of users
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+    post:
+      summary: Create a new user
+      operationId: create_user
+      tags:
+        - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+      requestBody:
+        description: User object to be added
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+  /users/{id}:
+    get:
+      summary: Get a user by ID
+      operationId: get_user_by_id
+      tags:
+        - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user to get
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: User found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    put:
+      summary: Update a user by ID
+      operationId: update_user_by_id
+      tags:
+        - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user to update
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        description: User object to be updated
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+        '404':
+          description: User not found
+    delete:
+      summary: Delete a user by ID
+      operationId: delete_user_by_id
+      tags:
+        - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+      parameters:
+        - name: id
+          in: path
+          description: ID of the user to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: User deleted
+components:
+  schemas:
+    User:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        unit:
+          type: string
+        salary:
+          type: number
+      required:
+        - name
+        - unit
+        - salary
