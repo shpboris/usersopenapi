@@ -1,0 +1,70 @@
+1.
+Python Web application ecosystem
+
+1.1
+WSGI protocol - specifies the integration between a webserver and Python app.
+Like servlet spec in Java.
+
+1.2
+WSGI server - handles end user HTTP requests and forwards them to WSGI-capable Python application
+via WSGI protocol (seems like it is a code level protocol). WSGI server is like servlet container in Java web development.
+There are many WSGI servers - Gunicorn, Waitress (analogy of Tomcat or Jetty in Java).
+In this code I use Waitress as it is pure Python app that can
+run also on Windows.
+
+1.3
+Werkzeug - library that helps to implement application side of WSGI protocol.
+
+1.4
+Flask - a framework for Web development like Spring MVC.
+Uses Werkzeug to  implement WSGI protocol.
+
+1.5
+OpenAPI generator plugin - allows client and server code generation based on OpenAPI spec yaml files.
+
+1.6
+Connexion - performs request routing and input validation based on OpenAPI spec yaml files
+
+
+2.
+Code generation and running instructions
+
+2.1
+install node/npm
+
+2.2
+C:\Users\shpilb>npm install @openapitools/openapi-generator-cli -g
+
+2.3
+C:\py-branches\usersopenapi>python -m venv venv
+
+2.4
+C:\py-branches\usersopenapi\venv\Scripts>activate.bat
+
+(venv) C:\py-branches\usersopenapi\venv\Scripts>
+
+2.5
+Put your openapi.yml to C:\py-branches\usersopenapi
+
+Adjust location of the users_controller that is going to be generated accordingly to your custom package structure - api.spec.v1.openapi_server.
+For this, add the following to your openapi.yml file.
+x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+
+2.6
+(venv) C:\py-branches\usersopenapi>openapi-generator-cli generate -i .\api\spec\v1\openapi.yaml -g python-flask -o .\api\spec\v1
+
+The option of setting the package name is unfortunately ignored: --package-name api.spec.v1.openapi_server.
+So needs to change imports manually (see #7 below).
+
+To avoid overriding existing generated files use --skip-overwrite option like in example below
+openapi-generator-cli generate -i .\api\spec\v1\openapi.yaml -g python-flask -o .\api\spec\v1 --skip-overwrite
+
+2.7
+(venv) C:\py-branches\usersopenapi\api\spec\v1>pip install -r requirements.txt
+
+2.8
+Change import statements to use api.spec.v1.openapi_server instead of openapi_server
+[Pay attention that - url: / part in openapi.yml controls the path on which swagger ui (may be also API) will be available]
+
+2.9
+Access the Swagger UI on http://127.0.0.1:8080/ui/

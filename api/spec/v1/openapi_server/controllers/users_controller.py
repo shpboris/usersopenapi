@@ -1,6 +1,5 @@
 import logging
 import connexion
-
 from api.spec.v1.openapi_server.models.user import User  # noqa: E501
 
 users_global_dict = {}
