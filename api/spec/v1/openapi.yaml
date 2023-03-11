@@ -6,6 +6,27 @@ servers:
   - url: /
 paths:
   /users:
+    post:
+      summary: Create a new user
+      operationId: create_user
+      tags:
+        - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+      requestBody:
+        description: User object to be added
+        required: true
+        x-body-name: user
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
     get:
       summary: Get all users
       operationId: get_users
@@ -21,26 +42,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/User'
-    post:
-      summary: Create a new user
-      operationId: create_user
-      tags:
-        - Users
-      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
-      requestBody:
-        description: User object to be added
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/User'
-      responses:
-        '201':
-          description: User created
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/User'
   /users/{id}:
     get:
       summary: Get a user by ID
@@ -49,7 +50,7 @@ paths:
         - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
       parameters:
-        - name: id
+        - name: user_id
           in: path
           description: ID of the user to get
           required: true
@@ -71,7 +72,7 @@ paths:
         - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
       parameters:
-        - name: id
+        - name: user_id
           in: path
           description: ID of the user to update
           required: true
@@ -100,7 +101,7 @@ paths:
         - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
       parameters:
-        - name: id
+        - name: user_id
           in: path
           description: ID of the user to delete
           required: true

@@ -6,21 +6,6 @@ servers:
 - url: /
 paths:
   /users:
-    get:
-      operationId: get_users
-      responses:
-        "200":
-          content:
-            application/json:
-              schema:
-                items:
-                  $ref: '#/components/schemas/User'
-                type: array
-          description: A list of users
-      summary: Get all users
-      tags:
-      - Users
-      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
     post:
       operationId: create_user
       requestBody:
@@ -42,25 +27,22 @@ paths:
       tags:
       - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
-  /users/{user_id}:
-    delete:
-      operationId: delete_user_by_id
-      parameters:
-      - description: ID of the user to delete
-        explode: false
-        in: path
-        name: user_id
-        required: true
-        schema:
-          type: integer
-        style: simple
+    get:
+      operationId: get_users
       responses:
-        "204":
-          description: User deleted
-      summary: Delete a user by ID
+        "200":
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/User'
+                type: array
+          description: A list of users
+      summary: Get all users
       tags:
       - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+  /users/{user_id}:
     get:
       operationId: get_user_by_id
       parameters:
@@ -117,14 +99,32 @@ paths:
       tags:
       - Users
       x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
+    delete:
+      operationId: delete_user_by_id
+      parameters:
+      - description: ID of the user to delete
+        explode: false
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: integer
+        style: simple
+      responses:
+        "204":
+          description: User deleted
+      summary: Delete a user by ID
+      tags:
+      - Users
+      x-openapi-router-controller: api.spec.v1.openapi_server.controllers.users_controller
 components:
   schemas:
     User:
       example:
-        unit: unit
-        name: name
-        id: 0
-        salary: 6.027456183070403
+        unit: IT
+        name: Boris
+        id: 1
+        salary: 10000
       properties:
         id:
           title: id
@@ -139,6 +139,7 @@ components:
           title: salary
           type: number
       required:
+      - id
       - name
       - salary
       - unit
