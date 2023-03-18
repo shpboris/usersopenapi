@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: usersopenapi-dpl
+  labels:
+    app: usersopenapi-lbl
+spec:
+  selector:
+    matchLabels:
+      app: usersopenapi-lbl
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: usersopenapi-lbl
+    spec:
+      containers:
+        - name: usersopenapi
+          image: shpboris/usersopenapi
+          imagePullPolicy: Never
+          ports:
+            - containerPort: 8080
+              protocol: TCP
+          volumeMounts:
+          - name: code-volume
+            mountPath: /usersopenapi
+      volumes:
+      - name: code-volume
+        hostPath:
+          path: /mnt/c/py-branches/usersopenapi
