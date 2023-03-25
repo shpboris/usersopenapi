@@ -7,7 +7,6 @@ from api.spec.v1.openapi_server.models.user import User  # noqa: E501
 from api.spec.v1.utils.user_util import get_db_user
 from api.spec.v1.utils.user_util import get_user
 
-users_global_dict = {}
 logger = logging.getLogger()
 
 
