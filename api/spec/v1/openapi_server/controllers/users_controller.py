@@ -1,6 +1,11 @@
 import logging
+
 import connexion
+
+from api.spec.v1.db_models.db_user import DbUser
 from api.spec.v1.openapi_server.models.user import User  # noqa: E501
+from api.spec.v1.utils.user_util import get_db_user
+from api.spec.v1.utils.user_util import get_user
 
 users_global_dict = {}
 logger = logging.getLogger()
@@ -18,7 +23,8 @@ def create_user(user=None):  # noqa: E501
     """
     logger.info("Started create_user")
     user = User.from_dict(connexion.request.get_json())
-    users_global_dict[user.id] = user
+    db_user = get_db_user(user)
+    db_user.save()
     logger.info("Completed create_user")
     return user, 201
 
@@ -32,9 +38,10 @@ def get_users():  # noqa: E501
     :rtype: Union[List[User], Tuple[List[User], int], Tuple[List[User], int, Dict[str, str]]
     """
     logger.info("Started get_users")
-    res = []
-    if users_global_dict:
-        res = [user.to_dict() for user in users_global_dict.values()]
+    users = []
+    for dbuser in DbUser.objects():
+        users.append(get_user(dbuser))
+    res = [user.to_dict() for user in users]
     logger.info("Completed get_users")
     return res
 
@@ -53,7 +60,8 @@ def get_user_by_id(user_id):  # noqa: E501
     ok, msg = validate_user_id(user_id)
     if not ok:
         return msg, 400
-    user = users_global_dict[user_id].to_dict()
+    dbuser = DbUser.objects.get(_id=user_id)
+    user = get_user(dbuser).to_dict()
     logger.info("Completed get_user_by_id")
     return user
 
@@ -75,7 +83,8 @@ def update_user_by_id(user_id, user=None):  # noqa: E501
     ok, msg = validate_user_id(user_id, user)
     if not ok:
         return msg, 400
-    users_global_dict[user.id] = user
+    db_user = get_db_user(user)
+    db_user.save()
     logger.info("Completed update_user_by_id")
 
 
@@ -93,16 +102,17 @@ def delete_user_by_id(user_id):  # noqa: E501
     ok, msg = validate_user_id(user_id)
     if not ok:
         return msg, 400
-    users_global_dict.pop(user_id)
+    DbUser.objects(_id=user_id).delete()
     logger.info("Completed delete_user_by_id")
 
 
 def validate_user_id(user_id, user_param=None):
     msg = None
-
-    if user_id not in users_global_dict:
+    try:
+        DbUser.objects.get(_id=user_id)
+    except Exception as e:
         msg = "User with id: " + str(user_id) + " not found"
-    elif user_param is not None and user_id != user_param.id:
+    if user_param is not None and user_id != user_param.id:
         msg = "id: " + str(user_id) + " in path variable doesn't match id: " \
               + str(user_param.id) + " in received object"
     if msg is not None:
