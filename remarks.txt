@@ -245,3 +245,53 @@ is found under /mnt/c/py-branches/usersopenapi/api/spec/v1/openapi_server on Win
 
 9.
 The same CRUD vs MongoDB can be found at using-mongo branch in the current repository in GitHub
+
+10.
+Uploading the package to TestPyPI and installing from there
+
+10.1
+Build the package if it wasn't done yet
+(venv) C:\py-branches\usersopenapi>py -m build
+
+10.2
+Install Twine
+(venv) C:\py-branches\usersopenapi>py -m pip install --upgrade twine
+
+10.3
+Upload to TestPyPI
+(venv) C:\py-branches\usersopenapi>twine upload --repository testpypi dist/*
+
+When asked for the user and password, pass
+
+Enter your username: __token__
+Enter your password: pypi-AgENdGVzdC5weXBpLm9yZwIkMjUxMGQ5YjQtZDZkNy00MDc1LWE3MjctMjZkMjQ2ZThiYzM4AAIqWzMsIjdlNDg0ODdmLWUwNTUtNDYyMS04MTllLWUyYWZiY2U1YmM2OSJdAAAGIIpl9ltR9G5aUmDunjP_bDzjQYZGFD05BOzypAN9Pt1j
+
+10.4
+To install the package from TestPyPI
+(venv) C:\py-branches\usersopenapi>py -m pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ usersopenapi-shpilb
+
+Note using regular PyPI repository as extra URL in extra-index-url param - this is for downloading the dependencies of the package that might not exist in
+TestPyPI.
+
+Also note using usersopenapi-shpilb (hyphen) as package name while package name in pyproject.toml is usersopenapi_shpilb and
+actual wheel/source distribution files' prefixes being usersopenapi_shpilb (underscore).
+
+Your package can be found at TestPyPI repo's UI - https://test.pypi.org/
+Just search for shpilb string
+
+10.5
+Run and access UI
+
+Run -
+(venv) C:\py-branches\usersopenapi>py -m api.spec.v1.openapi_server
+
+Access UI -
+http://localhost:8080/ui
+
+
+10.6
+Resources
+
+This explains the whole process - https://packaging.python.org/en/latest/tutorials/packaging-projects/
+Might also be useful - https://packaging.python.org/en/latest/guides/using-testpypi/
+https://packaging.python.org/en/latest/tutorials/installing-packages/#creating-and-using-virtual-environments

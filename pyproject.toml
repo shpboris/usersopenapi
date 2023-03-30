@@ -3,7 +3,7 @@ requires = ["setuptools>=61.0", "wheel"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "usersopenapi"
+name = "usersopenapi_shpilb"
 version = "0.0.1"
 authors = [
   { name="Boris Shpilyuck", email="boris@emc.com" },
