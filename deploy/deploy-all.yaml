@@ -25,9 +25,21 @@ spec:
   replicas: 1
   template:
     metadata:
+      annotations:
+        vault.hashicorp.com/agent-inject: 'true'
+        vault.hashicorp.com/role: 'mywebappk'
+        vault.hashicorp.com/agent-inject-secret-config.txt: 'secret/mywebapp/conf'
+        vault.hashicorp.com/agent-inject-template-config.txt: |
+          {{ with secret "secret/mywebapp/conf" }}
+          host=localhost
+          port=1433
+          user={{ .Data.data.myuser }}
+          pass={{ .Data.data.mypass }}
+          {{ end }}
       labels:
         app: usersopenapi-lbl
     spec:
+      serviceAccountName: myserviceacc
       containers:
         - name: usersopenapi
           image: shpboris/usersopenapi
